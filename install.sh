@@ -436,6 +436,12 @@ function ssl_install() {
 function acme() {
   "$HOME"/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
+  if "$HOME"/.acme.sh/acme.sh --issue -d "${domain}" --register-account  -m yifeng.tan@outlook.com --server zerossl --standalone -k ec-256 --force --test; then
+    echo -e "${OK} ${GreenBG} SSL 证书测试签发成功，开始正式签发 ${Font}"
+    rm -rf "$HOME/.acme.sh/${domain}_ecc"
+    sleep 2
+  fi
+
   systemctl restart nginx
 
   if "$HOME"/.acme.sh/acme.sh --issue -d "${domain}" --register-account  -m yifeng.tan@outlook.com --server zerossl --standalone -k ec-256 --webroot "$website_dir" --force; then
@@ -496,7 +502,6 @@ function ssl_judge_and_install() {
     "$HOME"/.acme.sh/acme.sh --installcert -d "${domain}" --fullchainpath /ssl/xray.crt --keypath /ssl/xray.key --ecc
     judge "证书应用"
   else
-    mkdir /ssl
     ssl_install
     acme
   fi
