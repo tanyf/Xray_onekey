@@ -444,7 +444,7 @@ function acme() {
 
   systemctl restart nginx
 
-  if "$HOME"/.acme.sh/acme.sh --issue -d "${domain}" --register-account  -m yifeng.tan@outlook.com --server zerossl --standalone -k ec-256 --webroot "$website_dir" --force; then
+  if "$HOME"/.acme.sh/acme.sh --issue -d "${domain}" --standalone -k ec-256 --webroot "$website_dir" --force; then
     print_ok "SSL 证书生成成功"
     sleep 2
     if "$HOME"/.acme.sh/acme.sh --installcert -d "${domain}" --fullchainpath /ssl/xray.crt --keypath /ssl/xray.key --reloadcmd "systemctl restart xray" --reloadcmd "systemctl restart nginx" --ecc --force; then
